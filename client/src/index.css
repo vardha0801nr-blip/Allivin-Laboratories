@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7fafc;
+  color: #102033;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.dark body {
+  background: #071625;
+  color: #eef7ff;
+}
+
+.section-shell {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.eyebrow {
+  @apply text-sm font-bold uppercase tracking-[0.18em] text-brand-teal;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+.dark .glass {
+  background: rgba(9, 26, 42, 0.76);
+}
+
+.input {
+  @apply w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-brand-blue focus:ring-4 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-900 dark:focus:ring-blue-950;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-blue px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-700/20 transition hover:-translate-y-0.5 hover:bg-brand-navy;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-bold text-brand-navy transition hover:-translate-y-0.5 hover:border-brand-blue hover:text-brand-blue dark:border-slate-700 dark:bg-slate-900 dark:text-white;
+}
+
+.section-page > [data-section] {
+  display: none;
+}
+
+.section-page[data-active-section="home"] > [data-section="home"],
+.section-page[data-active-section="about"] > [data-section="about"],
+.section-page[data-active-section="products"] > [data-section="products"],
+.section-page[data-active-section="facilities"] > [data-section="facilities"],
+.section-page[data-active-section="quality"] > [data-section="quality"],
+.section-page[data-active-section="certifications"] > [data-section="certifications"],
+.section-page[data-active-section="gallery"] > [data-section="gallery"],
+.section-page[data-active-section="contact"] > [data-section="contact"] {
+  display: block;
+}
+
+.section-page + footer {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  header.site-sidebar + main,
+  header.site-sidebar + main + footer {
+    margin-left: 18rem;
+  }
+}
