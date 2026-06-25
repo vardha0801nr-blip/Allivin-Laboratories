@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, FlaskConical, Mail, MapPin, Phone, Search, X } from "lucide-react";
+import { ArrowRight, Award, Box, CheckCircle2, Clock, Factory, Facebook, FileCheck2, FlaskConical, Headphones, Instagram, Linkedin, Mail, MapPin, PackageCheck, Phone, Pill, Search, ShieldCheck, Syringe, Truck, Users, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Reveal from "../components/Reveal.jsx";
@@ -7,7 +7,7 @@ import SectionHeader from "../components/SectionHeader.jsx";
 import { certifications, facilities, gallery as defaultGallery, imageBank, productFallbackImages, products as defaultProducts, stats, values } from "../data/siteData.js";
 
 const productStorageKey = "allivin_admin_products";
-const galleryStorageKey = "allivin_admin_gallery";
+const galleryStorageKey = "allivin_admin_gallery_v3";
 
 function getItemId(item) {
   return item._id || item.id || item.title || item.name;
@@ -38,7 +38,59 @@ export default function Home() {
   const [lightbox, setLightbox] = useState(null);
 
   const categories = ["All", ...new Set(publicProducts.map((product) => product.category))];
-  const galleryCategories = ["All", ...new Set(publicGallery.map((item) => item.category))];
+  const galleryCategories = ["All", "Laboratory", "Manufacturing", "Quality Testing", "Products"];
+  const homeStats = [
+    { icon: Award, number: "5+", label: "Years of Experience" },
+    { icon: Box, number: "120+", label: "Products Manufactured" },
+    { icon: Users, number: "150+", label: "Clients Served" },
+    { icon: FileCheck2, number: "12+", label: "Certifications Achieved" },
+    { icon: ShieldCheck, number: "99%", label: "Quality Compliance" },
+    { icon: Factory, number: "100%", label: "GMP Certified Facility" }
+  ];
+  const productCategories = [
+    {
+      category: "Tablets",
+      icon: Pill,
+      color: "text-brand-blue",
+      text: "High-quality tablet formulations for various therapeutic needs."
+    },
+    {
+      category: "Capsules",
+      icon: Pill,
+      color: "text-brand-teal",
+      text: "Reliable capsule formulations manufactured to quality standards."
+    },
+    {
+      category: "Syrups",
+      icon: FlaskConical,
+      color: "text-violet-600",
+      text: "Liquid formulations designed for patient convenience and stability."
+    },
+    {
+      category: "Injections",
+      title: "Injectables",
+      icon: Syringe,
+      color: "text-orange-600",
+      text: "Sterile injectable products manufactured under strict quality controls."
+    }
+  ].map((item) => ({
+    ...item,
+    title: item.title || item.category,
+    image: publicProducts.find((product) => product.category === item.category)?.image || productFallbackImages[item.category]
+  }));
+  const whyChoose = [
+    { icon: Award, title: "GMP Certified Manufacturing", text: "International quality standards with GMP compliance." },
+    { icon: Factory, title: "Modern Infrastructure", text: "Advanced machinery and technology for precision manufacturing." },
+    { icon: Users, title: "Experienced Team", text: "Skilled professionals ensuring quality and excellence." },
+    { icon: ShieldCheck, title: "Quality Assurance", text: "Rigorous quality control at every stage of manufacturing." }
+  ];
+  const processSteps = [
+    { icon: Pill, title: "Raw Materials", text: "Sourced Carefully" },
+    { icon: Factory, title: "Production", text: "Controlled Process" },
+    { icon: FlaskConical, title: "Quality Testing", text: "Multi-level Testing" },
+    { icon: PackageCheck, title: "Packaging", text: "Safe & Secure" },
+    { icon: Truck, title: "Distribution", text: "On-time Delivery" }
+  ];
   const filteredProducts = useMemo(() => publicProducts.filter((product) => {
     const matchesCategory = category === "All" || product.category === category;
     const matchesQuery = `${product.name} ${product.description} ${product.category}`.toLowerCase().includes(query.toLowerCase());
@@ -72,31 +124,118 @@ export default function Home() {
 
   return (
     <main className="section-page" data-active-section={activeSection}>
-      <section id="home" data-section="home" className="relative min-h-screen overflow-hidden bg-brand-navy">
-        <img src={imageBank.hero} alt="Pharmaceutical laboratory" className="absolute inset-0 h-full w-full object-cover opacity-42" />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy via-brand-navy/86 to-brand-blue/40" />
-        <div className="section-shell relative grid min-h-[calc(100vh-5rem)] items-center gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr]">
-          <Reveal>
-            <p className="eyebrow text-cyan-200">Premium Pharmaceutical Manufacturing</p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-6xl">Innovating Healthcare Through Quality Manufacturing</h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-blue-50">Allivin Laboratories delivers dependable tablets, capsules, syrups, injectables, and formulation support through validated processes, disciplined quality systems, and modern manufacturing infrastructure.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href="#products" className="btn-primary bg-white text-brand-navy hover:bg-brand-sky">Explore Products <ArrowRight size={18} /></a>
-              <a href="#contact" className="btn-secondary border-white/30 bg-white/10 text-white hover:bg-white hover:text-brand-navy">Contact Us</a>
+      <section id="home" data-section="home" className="min-h-screen overflow-hidden bg-white text-brand-navy dark:bg-slate-950">
+        <div className="relative overflow-hidden">
+          <img src={imageBank.production} alt="Pharmaceutical manufacturing facility" className="absolute inset-y-0 right-0 h-full w-full object-cover opacity-35 lg:w-[70%] lg:opacity-75" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/96 to-white/35 dark:from-slate-950 dark:via-slate-950/92 dark:to-slate-950/35" />
+          <div className="section-shell relative py-12 lg:py-16">
+            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+              <Reveal className="flex min-h-[390px] flex-col justify-center">
+                <p className="eyebrow">Premium Pharmaceutical Manufacturing</p>
+                <h1 className="mt-4 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-5xl xl:text-6xl dark:text-white">
+                  Trusted Pharmaceutical Manufacturing Partner for Quality <span className="text-brand-blue">Healthcare Solutions</span>
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-slate-700 dark:text-slate-300">
+                  We manufacture high-quality tablets, capsules, syrups, and injectable formulations with advanced technology, strict quality control, and regulatory compliance.
+                </p>
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <a href="#products" className="btn-primary">Explore Products <ArrowRight size={18} /></a>
+                  <a href="#contact" className="btn-secondary">Contact Us <ArrowRight size={18} /></a>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.1} className="flex items-start justify-end">
+                <div className="grid w-full max-w-3xl gap-3 rounded-xl bg-white/88 p-3 shadow-premium backdrop-blur md:grid-cols-3 dark:bg-slate-900/88">
+                  {[
+                    ["WHO-GMP", "Certified"],
+                    ["ISO 9001:2015", "Certified"],
+                    ["GMP Certified", "Facility"]
+                  ].map(([title, label], index) => (
+                    <div key={title} className="flex items-center gap-3 rounded-lg border border-slate-100 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-950">
+                      <Award className="text-brand-blue" size={28} />
+                      <div>
+                        <p className="text-sm font-extrabold text-brand-navy dark:text-white">{title}</p>
+                        <p className="text-xs font-semibold text-slate-600 dark:text-slate-300">{label}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
             </div>
+          </div>
+        </div>
+
+        <div className="section-shell -mt-4 relative z-10">
+          <Reveal className="grid gap-3 rounded-xl border border-slate-100 bg-white p-4 shadow-premium md:grid-cols-3 xl:grid-cols-6 dark:border-slate-800 dark:bg-slate-900">
+            {homeStats.map(({ icon: Icon, number, label }) => (
+              <div key={label} className="flex items-center gap-3 border-slate-200 px-2 py-3 xl:border-r xl:last:border-r-0 dark:border-slate-800">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50 text-brand-blue dark:bg-blue-950">
+                  <Icon size={25} />
+                </div>
+                <div>
+                  <p className="text-2xl font-extrabold text-brand-blue">{number}</p>
+                  <p className="text-xs font-bold leading-5 text-slate-700 dark:text-slate-300">{label}</p>
+                </div>
+              </div>
+            ))}
           </Reveal>
-          <Reveal delay={0.15} className="hidden lg:block">
-            <div className="glass rounded-2xl border border-white/20 p-6 shadow-premium">
-              <div className="grid gap-4">
-                {stats.map(([number, label]) => (
-                  <div key={label} className="rounded-xl border border-white/30 bg-white/70 p-5 dark:border-slate-700 dark:bg-slate-900/70">
-                    <span className="text-3xl font-extrabold text-brand-blue">{number}</span>
-                    <p className="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</p>
+        </div>
+
+        <div className="section-shell py-8">
+          <Reveal>
+            <h2 className="text-center text-2xl font-extrabold text-brand-navy dark:text-white">Our Product Categories</h2>
+          </Reveal>
+          <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {productCategories.map(({ category, title, icon: Icon, image, color, text }, index) => (
+              <Reveal key={category} delay={index * 0.04} className="group overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-premium dark:border-slate-800 dark:bg-slate-900">
+                <div className="relative">
+                  <img src={image} alt={title} onError={(event) => { event.currentTarget.src = productFallbackImages[category]; }} className="h-36 w-full object-cover transition duration-500 group-hover:scale-105" />
+                  <div className="absolute -bottom-6 left-6 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-lg dark:bg-slate-950">
+                    <Icon className={color} size={28} />
+                  </div>
+                </div>
+                <div className="p-6 pt-9">
+                  <h3 className="text-xl font-extrabold text-brand-navy dark:text-white">{title}</h3>
+                  <p className="mt-3 min-h-16 text-sm leading-6 text-slate-600 dark:text-slate-300">{text}</p>
+                  <a href={`#products`} onClick={() => setCategory(category)} className={`mt-5 inline-flex items-center gap-2 text-sm font-extrabold ${color}`}>
+                    View Products <ArrowRight size={16} />
+                  </a>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <div className="mt-8 grid gap-8 xl:grid-cols-[1fr_1.1fr]">
+            <Reveal>
+              <h2 className="text-2xl font-extrabold text-brand-navy dark:text-white">Why Choose Allivin Laboratories?</h2>
+              <div className="mt-5 grid gap-4 md:grid-cols-2">
+                {whyChoose.map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="flex gap-3 border-r border-slate-200 pr-4 last:border-r-0 dark:border-slate-800">
+                    <Icon className="mt-1 shrink-0 text-brand-blue" size={26} />
+                    <div>
+                      <h3 className="text-sm font-extrabold text-brand-navy dark:text-white">{title}</h3>
+                      <p className="mt-2 text-xs leading-5 text-slate-600 dark:text-slate-300">{text}</p>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <h2 className="text-2xl font-extrabold text-brand-navy dark:text-white">Our Manufacturing Process</h2>
+              <div className="mt-5 grid gap-4 sm:grid-cols-5">
+                {processSteps.map(({ icon: Icon, title, text }, index) => (
+                  <div key={title} className="relative text-center">
+                    {index < processSteps.length - 1 && <span className="absolute left-[58%] top-8 hidden h-px w-[70%] bg-slate-300 sm:block dark:bg-slate-700" />}
+                    <div className="relative mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-blue-200 bg-white text-brand-blue shadow-sm dark:border-blue-900 dark:bg-slate-900">
+                      <Icon size={28} />
+                    </div>
+                    <h3 className="mt-3 text-xs font-extrabold text-brand-navy dark:text-white">{title}</h3>
+                    <p className="mt-1 text-xs text-slate-600 dark:text-slate-300">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -221,38 +360,215 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="gallery" data-section="gallery" className="bg-slate-50 py-20 dark:bg-slate-900">
+      <section id="gallery" data-section="gallery" className="min-h-screen bg-slate-950 py-20 text-white">
         <div className="section-shell">
-          <SectionHeader eyebrow="Gallery" title="A closer look at our facilities, laboratories, and products" />
-          <div className="mb-8 flex flex-wrap justify-center gap-2">
+          <Reveal className="relative overflow-hidden rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.22),_transparent_34%),linear-gradient(135deg,#07111f_0%,#0b1d33_52%,#06101d_100%)] px-5 py-14 shadow-premium sm:px-10 lg:px-14">
+            <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-brand-blue/20 blur-3xl" />
+            <div className="relative max-w-4xl">
+              <p className="eyebrow">Gallery</p>
+              <h1 className="mt-4 text-3xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
+                A Closer Look at Our Facilities, Laboratories & Products
+              </h1>
+              <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+                Explore our pharmaceutical manufacturing facilities, research laboratories, quality testing units, and product categories through our visual gallery.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-8 flex flex-wrap justify-center gap-3">
             {galleryCategories.map((item) => (
-              <button key={item} onClick={() => setGalleryFilter(item)} className={`rounded-lg px-4 py-2 text-sm font-bold transition ${galleryFilter === item ? "bg-brand-blue text-white" : "bg-white text-slate-700 hover:text-brand-blue dark:bg-slate-800 dark:text-slate-200"}`}>{item}</button>
-            ))}
-          </div>
-          <div className="grid gap-5 md:grid-cols-3">
-            {filteredGallery.map((item) => (
-              <button key={getItemId(item)} onClick={() => setLightbox(item)} className="group relative overflow-hidden rounded-xl text-left shadow-sm">
-                <img src={item.image} alt={item.title} onError={(event) => { event.currentTarget.style.display = "none"; }} className="h-72 w-full object-cover transition duration-500 group-hover:scale-105" />
-                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-brand-navy/90 to-transparent p-5 font-bold text-white">{item.title}</span>
+              <button
+                key={item}
+                onClick={() => setGalleryFilter(item)}
+                className={`rounded-full border px-5 py-2.5 text-sm font-extrabold transition ${
+                  galleryFilter === item
+                    ? "border-brand-blue bg-brand-blue text-white shadow-lg shadow-blue-900/30"
+                    : "border-white/10 bg-white/5 text-slate-200 hover:border-brand-teal hover:bg-brand-teal/10 hover:text-white"
+                }`}
+              >
+                {item}
               </button>
             ))}
+          </Reveal>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {filteredGallery.map((item, index) => (
+              <Reveal key={getItemId(item)} delay={index * 0.04}>
+                <button
+                  onClick={() => setLightbox(item)}
+                  className="group relative block h-80 w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-900 text-left shadow-2xl shadow-slate-950/30"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = imageBank.lab;
+                    }}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-110"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-slate-950/92 via-slate-950/20 to-transparent opacity-90 transition group-hover:bg-slate-950/45" />
+                  <span className="absolute left-4 top-4 rounded-full border border-white/15 bg-slate-950/60 px-3 py-1 text-xs font-bold text-cyan-100 backdrop-blur">
+                    {item.category}
+                  </span>
+                  <span className="absolute inset-x-0 bottom-0 p-5">
+                    <span className="block text-xl font-extrabold leading-snug text-white">{item.title}</span>
+                  </span>
+                </button>
+              </Reveal>
+            ))}
           </div>
+
+          <Reveal delay={0.12} className="mx-auto mt-12 max-w-4xl rounded-2xl border border-white/10 bg-white/[0.06] p-7 text-center shadow-premium">
+            <p className="text-lg font-semibold leading-8 text-slate-200">
+              Our facilities are designed to maintain the highest standards of quality, safety, and efficiency across all operations.
+            </p>
+            <a href="#contact" className="btn-primary mt-6">
+              Contact Us <ArrowRight size={18} />
+            </a>
+          </Reveal>
         </div>
       </section>
 
-      <section id="contact" data-section="contact" className="bg-white py-20 dark:bg-slate-950">
-        <div className="section-shell grid gap-10 lg:grid-cols-[0.85fr_1.15fr]">
-          <div>
-            <SectionHeader align="left" eyebrow="Contact Us" title="Start a manufacturing conversation with Allivin Laboratories" text="Share your formulation, business inquiry, or partnership requirement and our team will respond promptly." />
-            <div className="grid gap-4">
-              <p className="flex gap-3 text-slate-700 dark:text-slate-200"><MapPin className="text-brand-teal" /> Industrial Pharma Park, Hyderabad, Telangana, India</p>
-              <p className="flex gap-3 text-slate-700 dark:text-slate-200"><Mail className="text-brand-teal" /> info@allivinlabs.com</p>
-              <p className="flex gap-3 text-slate-700 dark:text-slate-200"><Phone className="text-brand-teal" /> +91 98765 43210</p>
+      <section id="contact" data-section="contact" className="min-h-screen bg-[#06111f] text-white">
+        <div className="section-shell py-12 lg:py-16">
+          <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+            <Reveal>
+              <h1 className="max-w-2xl text-4xl font-extrabold leading-tight sm:text-5xl">
+                Start a manufacturing conversation with <span className="text-brand-teal">Allivin Laboratories</span>
+              </h1>
+              <p className="mt-5 max-w-xl text-base leading-8 text-slate-300">
+                Share your formulation, business inquiry, or partnership requirement and our team will respond promptly.
+              </p>
+
+              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+                {[
+                  {
+                    icon: MapPin,
+                    title: "Our Location",
+                    text: "Industrial Pharma Park, Hyderabad, Telangana, India - 500 075"
+                  },
+                  {
+                    icon: Mail,
+                    title: "Email Us",
+                    text: "info@allivinlabs.com"
+                  },
+                  {
+                    icon: Phone,
+                    title: "Call Us",
+                    text: "+91 98765 43210"
+                  },
+                  {
+                    icon: Clock,
+                    title: "Working Hours",
+                    text: "Mon - Sat : 9:00 AM - 6:00 PM\nSunday : Closed"
+                  }
+                ].map(({ icon: Icon, title, text }) => (
+                  <div key={title} className="min-h-36 rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07] sm:p-5">
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 text-brand-teal sm:h-14 sm:w-14">
+                        <Icon size={24} />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base font-extrabold leading-6 text-white">{title}</h3>
+                        <p className={`mt-3 whitespace-pre-line text-sm leading-6 text-slate-300 ${title === "Email Us" ? "break-all" : ""} ${title === "Call Us" ? "whitespace-nowrap" : ""}`}>{text}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08} className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-premium">
+              <iframe
+                title="Allivin Laboratories map"
+                className="h-[430px] w-full border-0 lg:h-[520px]"
+                loading="lazy"
+                src="https://www.google.com/maps?q=Allivin%20Laboratories%20Hyderabad&output=embed"
+              />
+            </Reveal>
+          </div>
+
+          <Reveal delay={0.12} className="mt-8 rounded-xl border border-white/10 bg-white/[0.06] p-6 shadow-premium">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-center gap-5">
+                <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-brand-blue text-white shadow-lg shadow-blue-900/30">
+                  <Headphones size={32} />
+                </span>
+                <div>
+                  <h2 className="text-xl font-extrabold">Have questions or business requirements?</h2>
+                  <p className="mt-2 text-slate-300">Contact our team directly through phone or email.</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <a href="tel:+919876543210" className="btn-primary min-w-44"><Phone size={18} /> Call Now</a>
+                <a href="mailto:info@allivinlabs.com" className="inline-flex min-w-44 items-center justify-center gap-2 rounded-lg border border-brand-teal/70 px-5 py-3 text-sm font-bold text-cyan-100 transition hover:-translate-y-0.5 hover:bg-brand-teal/15"><Mail size={18} /> Email Us</a>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
+        <div className="border-t border-white/10 bg-[#071827]">
+          <div className="section-shell grid gap-10 py-10 md:grid-cols-2 xl:grid-cols-[1.1fr_0.9fr_0.9fr_1.1fr_0.9fr]">
+            <div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/15 bg-white/5">
+                  <ShieldCheck size={34} />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-extrabold">Allivin</h2>
+                  <p className="text-sm font-extrabold tracking-[0.25em] text-brand-teal">LABORATORIES</p>
+                </div>
+              </div>
+              <p className="mt-5 max-w-xs text-sm leading-7 text-slate-300">
+                Committed to quality, innovation, and excellence in pharmaceutical manufacturing.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="font-extrabold">Quick Links</h3>
+              <div className="mt-4 grid gap-3 text-sm text-slate-300">
+                {[
+                  ["Home", "#home"],
+                  ["About Us", "#about"],
+                  ["Products", "#products"],
+                  ["Manufacturing Facilities", "#facilities"],
+                  ["Contact Us", "#contact"]
+                ].map(([label, href]) => <a key={label} href={href} className="transition hover:text-brand-teal">{label}</a>)}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-extrabold">Our Products</h3>
+              <div className="mt-4 grid gap-3 text-sm text-slate-300">
+                {["Tablets", "Capsules", "Syrups", "Injectables"].map((label) => <a key={label} href="#products" className="transition hover:text-brand-teal">{label}</a>)}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-extrabold">Contact Info</h3>
+              <div className="mt-4 grid gap-3 text-sm text-slate-300">
+                <span className="flex gap-3"><Phone className="shrink-0 text-brand-teal" size={18} /> +91 98765 43210</span>
+                <span className="flex gap-3"><Mail className="shrink-0 text-brand-teal" size={18} /> info@allivinlabs.com</span>
+                <span className="flex gap-3"><MapPin className="shrink-0 text-brand-teal" size={18} /> Industrial Pharma Park, Hyderabad, Telangana, India - 500 075</span>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-extrabold">Follow Us</h3>
+              <div className="mt-5 flex gap-3">
+                {[
+                  [Facebook, "Facebook"],
+                  [Linkedin, "LinkedIn"],
+                  [Instagram, "Instagram"]
+                ].map(([Icon, label]) => (
+                  <a key={label} href="#" aria-label={label} className="flex h-12 w-12 items-center justify-center rounded-full bg-white/8 text-white transition hover:-translate-y-1 hover:bg-brand-blue">
+                    <Icon size={20} />
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-          <Reveal className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-premium dark:border-slate-800 dark:bg-slate-900">
-            <iframe title="Allivin Laboratories map" className="h-[430px] w-full border-0" loading="lazy" src="https://www.google.com/maps?q=Hyderabad%20Pharma%20City&output=embed" />
-          </Reveal>
         </div>
       </section>
 

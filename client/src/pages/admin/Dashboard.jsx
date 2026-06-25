@@ -14,9 +14,10 @@ const blankProduct = {
   quality: "",
   contactPhone: "+91 98765 43210"
 };
-const blankGallery = { title: "", category: "Manufacturing", image: "" };
+const blankGallery = { title: "", category: "Laboratory", image: "" };
+const galleryCategories = ["Laboratory", "Manufacturing", "Quality Testing", "Products", "Packaging"];
 const productStorageKey = "allivin_admin_products";
-const galleryStorageKey = "allivin_admin_gallery";
+const galleryStorageKey = "allivin_admin_gallery_v3";
 
 function getItemId(item) {
   return item._id || item.id;
@@ -79,6 +80,7 @@ export default function Dashboard() {
   const [editingProductId, setEditingProductId] = useState("");
   const [productImageFile, setProductImageFile] = useState(null);
   const [galleryForm, setGalleryForm] = useState(blankGallery);
+  const [editingGalleryId, setEditingGalleryId] = useState("");
   const [galleryImageFile, setGalleryImageFile] = useState(null);
   const [status, setStatus] = useState("");
 
@@ -199,22 +201,43 @@ export default function Dashboard() {
       setStatus("Unable to read selected gallery image. Try another image or use an image URL.");
       return;
     }
-    let savedImage = { ...galleryForm, image: uploadedImage || galleryForm.image, _id: `gallery-${Date.now()}` };
+    let savedImage = {
+      ...galleryForm,
+      image: uploadedImage || galleryForm.image,
+      _id: editingGalleryId || `gallery-${Date.now()}`
+    };
     try {
       const payload = new FormData();
       Object.entries(galleryForm).forEach(([key, value]) => payload.append(key, value));
       if (galleryImageFile) payload.append("imageFile", galleryImageFile);
-      const { data } = await api.post("/gallery", payload);
+      const { data } = editingGalleryId
+        ? await api.put(`/gallery/${editingGalleryId}`, payload)
+        : await api.post("/gallery", payload);
       savedImage = { ...savedImage, ...data, _id: getItemId(data) || savedImage._id };
     } catch {
-      // Local mode keeps gallery add working without MongoDB/API writes.
+      // Local mode keeps gallery add/edit working without MongoDB/API writes.
     }
-    const updatedGallery = [savedImage, ...gallery];
+    const updatedGallery = editingGalleryId
+      ? gallery.map((item) => (getItemId(item) === editingGalleryId ? savedImage : item))
+      : [savedImage, ...gallery];
     setGallery(updatedGallery);
     saveStoredItems(galleryStorageKey, updatedGallery);
     setGalleryForm(blankGallery);
+    setEditingGalleryId("");
     setGalleryImageFile(null);
-    setStatus("Gallery image added.");
+    setStatus(editingGalleryId ? "Gallery image updated." : "Gallery image added.");
+  }
+
+  function editGallery(item) {
+    setTab("gallery");
+    setEditingGalleryId(getItemId(item));
+    setGalleryForm({
+      title: item.title || "",
+      category: item.category || "Laboratory",
+      image: item.image || ""
+    });
+    setGalleryImageFile(null);
+    setStatus("Editing selected gallery image.");
   }
 
   async function removeGallery(id) {
@@ -316,14 +339,14 @@ export default function Dashboard() {
 
           {tab === "gallery" && (
             <div className="grid gap-6 xl:grid-cols-[390px_1fr]">
-              <Panel title="Add Gallery Image">
+              <Panel title={editingGalleryId ? "Edit Gallery Image" : "Add Gallery Image"}>
                 <form onSubmit={saveGallery} className="grid gap-4">
                   <Field label="Image Title">
                     <input className="input" placeholder="Image title" value={galleryForm.title} onChange={(event) => setGalleryForm({ ...galleryForm, title: event.target.value })} required />
                   </Field>
                   <Field label="Gallery Category">
                     <select className="input" value={galleryForm.category} onChange={(event) => setGalleryForm({ ...galleryForm, category: event.target.value })}>
-                      {["Manufacturing", "Laboratory", "Products"].map((item) => <option key={item}>{item}</option>)}
+                      {galleryCategories.map((item) => <option key={item}>{item}</option>)}
                     </select>
                   </Field>
                   <Field label="Image URL">
@@ -332,13 +355,28 @@ export default function Dashboard() {
                   <Field label="Upload Gallery Image">
                     <input className="input" type="file" accept="image/*" onChange={(event) => setGalleryImageFile(event.target.files?.[0] || null)} />
                   </Field>
-                  <button className="btn-primary"><ImagePlus size={18} /> Add Image</button>
+                  <div className="flex flex-wrap gap-3">
+                    <button className="btn-primary"><ImagePlus size={18} /> {editingGalleryId ? "Save Gallery Image" : "Add Image"}</button>
+                    {editingGalleryId && (
+                      <button
+                        type="button"
+                        className="btn-secondary"
+                        onClick={() => {
+                          setEditingGalleryId("");
+                          setGalleryForm(blankGallery);
+                          setGalleryImageFile(null);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </form>
               </Panel>
               <Panel title="Gallery Images">
                 <div className="grid gap-4 md:grid-cols-3">
                   {gallery.map((item) => (
-                    <AdminCard key={getItemId(item)} image={item.image} title={item.title} subtitle={item.category} onDelete={() => removeGallery(getItemId(item))} />
+                    <AdminCard key={getItemId(item)} image={item.image} title={item.title} subtitle={item.category} onEdit={() => editGallery(item)} onDelete={() => removeGallery(getItemId(item))} />
                   ))}
                 </div>
               </Panel>

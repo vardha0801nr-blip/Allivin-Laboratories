@@ -362,10 +362,12 @@ export const certifications = [
 ];
 
 export const gallery = [
-  { category: "Manufacturing", image: imageBank.production, title: "Modern Production Floor" },
-  { category: "Laboratory", image: imageBank.lab, title: "Research Laboratory" },
-  { category: "Laboratory", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=85", title: "Quality Testing" },
-  { category: "Products", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85", title: "Capsule Products" },
-  { category: "Products", image: "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1200&q=85", title: "Tablet Range" },
-  { category: "Manufacturing", image: imageBank.packaging, title: "Packaging Line" }
+  { id: "gallery-lab-01", category: "Laboratory", image: imageBank.lab, title: "Advanced Research Laboratory" },
+  { id: "gallery-mfg-01", category: "Manufacturing", image: imageBank.production, title: "Modern Manufacturing Unit" },
+  { id: "gallery-quality-01", category: "Quality Testing", image: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1200&q=85", title: "Quality Control Laboratory" },
+  { id: "gallery-products-01", category: "Products", image: "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=1200&q=85", title: "Tablet Formulations" },
+  { id: "gallery-products-02", category: "Products", image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85", title: "Capsule Manufacturing" },
+  { id: "gallery-mfg-02", category: "Manufacturing", image: "https://images.unsplash.com/photo-1579165466741-7f35e4755660?auto=format&fit=crop&w=1200&q=85", title: "Syrup Processing Unit" },
+  { id: "gallery-packaging-01", category: "Packaging", image: imageBank.packaging, title: "Packaging Facility" },
+  { id: "gallery-quality-02", category: "Quality Testing", image: imageBank.storage, title: "Storage & Distribution" }
 ];
