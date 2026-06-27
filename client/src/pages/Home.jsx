@@ -468,14 +468,10 @@ export default function Home() {
               <div className="mt-8 grid gap-4 md:grid-cols-2">
                 {[
                   {
-                    icon: MapPin,
-                    title: "Our Location",
-                    text: "Parvathapur, Medipally, Telangana"
-                  },
-                  {
                     icon: Mail,
                     title: "Email Us",
-                    text: contactInfo.email
+                    text: contactInfo.email,
+                    wide: true
                   },
                   {
                     icon: Phone,
@@ -487,8 +483,8 @@ export default function Home() {
                     title: "Working Hours",
                     text: "Mon - Sat : 9:00 AM - 6:00 PM"
                   }
-                ].map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07]">
+                ].map(({ icon: Icon, title, text, wide }) => (
+                  <div key={title} className={`rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07] ${wide ? "md:col-span-2" : ""}`}>
                     <div className="flex items-center gap-3">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 text-brand-teal">
                         <Icon size={22} />

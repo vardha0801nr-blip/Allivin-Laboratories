@@ -1,14 +1,19 @@
 import { ArrowLeft, Eye, EyeOff, LockKeyhole, ShieldPlus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api.js";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "admin@allivinlabs.com", password: "Admin@12345" });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    localStorage.removeItem("allivin_token");
+    localStorage.removeItem("allivin_admin");
+  }, []);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -46,10 +51,10 @@ export default function Login() {
             <p className="text-sm text-slate-500 dark:text-slate-300">Secure content management access</p>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 grid gap-4">
-          <input className="input" type="email" placeholder="Email" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required />
+        <form onSubmit={handleSubmit} className="mt-8 grid gap-4" autoComplete="off">
+          <input className="input" type="email" placeholder="Email" autoComplete="off" value={form.email} onChange={(event) => setForm({ ...form, email: event.target.value })} required />
           <label className="relative">
-            <input className="input pr-12" type={showPassword ? "text" : "password"} placeholder="Password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required />
+            <input className="input pr-12" type={showPassword ? "text" : "password"} placeholder="Password" autoComplete="new-password" value={form.password} onChange={(event) => setForm({ ...form, password: event.target.value })} required />
             <button
               type="button"
               aria-label={showPassword ? "Hide password" : "Show password"}
