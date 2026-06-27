@@ -18,6 +18,19 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { dark, toggleTheme } = useTheme();
 
+  function openSection(hash) {
+    setOpen(false);
+    if (window.location.pathname !== "/") {
+      window.location.href = `/${hash}`;
+      return;
+    }
+    if (window.location.hash === hash) {
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+      return;
+    }
+    window.location.hash = hash;
+  }
+
   return (
     <header className="site-sidebar sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90 xl:fixed xl:inset-y-0 xl:left-0 xl:w-72 xl:border-b-0 xl:border-r xl:bg-brand-navy xl:text-white xl:shadow-none xl:backdrop-blur-none xl:dark:bg-slate-950">
       <nav className="section-shell flex h-[76px] items-center justify-between gap-5 xl:h-full xl:flex-col xl:items-stretch xl:justify-start xl:px-5 xl:py-6">
@@ -34,9 +47,9 @@ export default function Navbar() {
         <div className="hidden w-full xl:mt-8 xl:flex">
           <div className="flex w-full flex-col items-stretch justify-start gap-2">
             {links.map(([label, href]) => (
-              <a key={label} href={`/${href}`} className="rounded-xl px-4 py-3 text-sm font-bold text-slate-700 transition hover:bg-white hover:text-brand-blue hover:shadow-sm dark:text-slate-200 dark:hover:bg-slate-800 xl:text-blue-50 xl:hover:bg-white/12 xl:hover:text-white xl:hover:shadow-none">
+              <button key={label} type="button" onClick={() => openSection(href)} className="rounded-xl px-4 py-3 text-left text-sm font-bold text-slate-700 transition hover:bg-white hover:text-brand-blue hover:shadow-sm dark:text-slate-200 dark:hover:bg-slate-800 xl:text-blue-50 xl:hover:bg-white/12 xl:hover:text-white xl:hover:shadow-none">
                 {label}
-              </a>
+              </button>
             ))}
           </div>
         </div>
@@ -65,9 +78,9 @@ export default function Navbar() {
             </div>
             <div className="grid gap-2">
               {links.map(([label, href]) => (
-                <a key={label} href={`/${href}`} onClick={() => setOpen(false)} className="rounded-xl bg-white/[0.06] px-4 py-3 font-semibold text-slate-100 transition hover:bg-brand-blue hover:text-white">
+                <button key={label} type="button" onClick={() => openSection(href)} className="rounded-xl bg-white/[0.06] px-4 py-3 text-left font-semibold text-slate-100 transition hover:bg-brand-blue hover:text-white">
                   {label}
-                </a>
+                </button>
               ))}
               <Link to="/admin-login" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-blue px-4 py-3 font-extrabold text-white transition hover:bg-brand-navy">
                 <LogIn size={18} /> Admin Login
