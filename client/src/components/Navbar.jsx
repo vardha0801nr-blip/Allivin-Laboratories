@@ -25,7 +25,7 @@ export default function Navbar() {
       return;
     }
     if (window.location.hash === hash) {
-      window.dispatchEvent(new HashChangeEvent("hashchange"));
+      window.dispatchEvent(new Event("hashchange"));
       return;
     }
     window.location.hash = hash;
@@ -69,20 +69,29 @@ export default function Navbar() {
 
       {open && (
         <div className="fixed inset-0 z-[100] bg-slate-950 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="h-full w-full overflow-y-auto bg-slate-950 p-6 text-white shadow-premium" onClick={(event) => event.stopPropagation()}>
-            <div className="mb-8 flex items-center justify-between">
-              <span className="text-lg font-extrabold text-white">Allivin Labs</span>
-              <button aria-label="Close menu" onClick={() => setOpen(false)} className="rounded-lg border border-white/15 bg-white/5 p-2 text-white">
+          <div className="relative h-full w-full overflow-y-auto bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.28),_transparent_34%),linear-gradient(160deg,#020617_0%,#08213a_52%,#020617_100%)] p-5 text-white shadow-premium" onClick={(event) => event.stopPropagation()}>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-brand-blue/10 blur-3xl" />
+            <div className="relative mb-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+              <div className="flex items-center gap-3">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue text-white shadow-lg shadow-blue-950/30">
+                  <ShieldPlus size={24} />
+                </span>
+                <div>
+                  <span className="block text-xl font-extrabold text-white">Allivin Labs</span>
+                  <span className="block text-xs font-extrabold uppercase tracking-[0.25em] text-brand-teal">Menu</span>
+                </div>
+              </div>
+              <button aria-label="Close menu" onClick={() => setOpen(false)} className="rounded-xl border border-white/15 bg-white/5 p-3 text-white transition hover:bg-white/10">
                 <X size={20} />
               </button>
             </div>
-            <div className="grid gap-2">
+            <div className="relative grid gap-3">
               {links.map(([label, href]) => (
-                <button key={label} type="button" onClick={() => openSection(href)} className="rounded-xl bg-white/[0.06] px-4 py-3 text-left font-semibold text-slate-100 transition hover:bg-brand-blue hover:text-white">
+                <button key={label} type="button" onClick={() => openSection(href)} className="rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-left text-base font-extrabold text-slate-50 shadow-lg shadow-slate-950/15 transition hover:border-brand-teal/50 hover:bg-brand-blue hover:text-white">
                   {label}
                 </button>
               ))}
-              <Link to="/admin-login" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-blue px-4 py-3 font-extrabold text-white transition hover:bg-brand-navy">
+              <Link to="/admin-login" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-blue px-5 py-4 font-extrabold text-white shadow-lg shadow-blue-950/30 transition hover:bg-brand-navy">
                 <LogIn size={18} /> Admin Login
               </Link>
             </div>
