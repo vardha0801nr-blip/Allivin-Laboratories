@@ -36,7 +36,7 @@ export default function Footer() {
           <h4 className="font-bold">Contact</h4>
           <div className="mt-4 grid gap-3 text-sm text-blue-100">
             <span className="flex gap-2"><MapPin size={18} /> Industrial Pharma Park, Hyderabad, India</span>
-            <span className="flex gap-2"><Mail size={18} /> info@allivinlabs.com</span>
+            <span className="flex gap-2"><Mail size={18} /> allvinlaboratories2022@gmail.com</span>
             <span className="flex gap-2"><Phone size={18} /> +91 98765 43210</span>
           </div>
         </div>

@@ -12,7 +12,7 @@ const contactStorageKey = "allivin_admin_contact";
 
 const defaultContact = {
   address: "NO.7-55, ROAD.NO.13, SATYANARAYANAPURAM, PARVATHAPUR, MEDIPALLY, MEDCHAL DIST., Parvatapur(V), Medipally(M), MEDCHAL MALKAJGIRI(Dist), Telangana, India",
-  email: "info@allivinlabs.com",
+  email: "allvinlaboratories2022@gmail.com",
   phone: "+91 96663 43024",
   hours: "Mon - Sat : 9:00 AM - 6:00 PM\nSunday : Closed"
 };
