@@ -510,18 +510,13 @@ export default function Home() {
                 loading="lazy"
                 src={`https://www.google.com/maps?q=${encodeURIComponent(contactInfo.address)}&output=embed`}
               />
-              <div className="grid gap-4 border-t border-white/10 bg-slate-950/70 p-5 text-sm text-slate-300 md:grid-cols-3">
-                <div className="flex gap-3">
-                  <MapPin className="mt-1 shrink-0 text-brand-teal" size={18} />
-                  <span className="leading-6">{contactInfo.address}</span>
-                </div>
-                <div className="flex gap-3">
-                  <Phone className="mt-1 shrink-0 text-brand-teal" size={18} />
-                  <span className="leading-6">{contactInfo.phone}</span>
-                </div>
-                <div className="flex gap-3">
-                  <Mail className="mt-1 shrink-0 text-brand-teal" size={18} />
-                  <span className="break-all leading-6">{contactInfo.email}</span>
+              <div className="border-t border-white/10 bg-slate-950/70 p-5 text-slate-300">
+                <div className="flex gap-4">
+                  <MapPin className="mt-1 shrink-0 text-brand-teal" size={22} />
+                  <div>
+                    <h3 className="text-base font-extrabold text-white">Our Location</h3>
+                    <p className="mt-2 max-w-3xl text-sm leading-7">{contactInfo.address}</p>
+                  </div>
                 </div>
               </div>
             </Reveal>
