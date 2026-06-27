@@ -465,12 +465,12 @@ export default function Home() {
                 Share your formulation, business inquiry, or partnership requirement and our team will respond promptly.
               </p>
 
-              <div className="mt-8 grid gap-5 sm:grid-cols-2">
+              <div className="mt-8 grid gap-4 md:grid-cols-2">
                 {[
                   {
                     icon: MapPin,
                     title: "Our Location",
-                    text: contactInfo.address
+                    text: "Parvathapur, Medipally, Telangana"
                   },
                   {
                     icon: Mail,
@@ -485,17 +485,17 @@ export default function Home() {
                   {
                     icon: Clock,
                     title: "Working Hours",
-                    text: contactInfo.hours
+                    text: "Mon - Sat : 9:00 AM - 6:00 PM"
                   }
                 ].map(({ icon: Icon, title, text }) => (
-                  <div key={title} className="min-h-36 rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07] sm:p-5">
-                    <div className="flex items-start gap-3">
-                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 text-brand-teal sm:h-14 sm:w-14">
-                        <Icon size={24} />
+                  <div key={title} className="rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07]">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 text-brand-teal">
+                        <Icon size={22} />
                       </span>
                       <div className="min-w-0 flex-1">
                         <h3 className="text-base font-extrabold leading-6 text-white">{title}</h3>
-                        <p className={`mt-3 whitespace-pre-line text-sm leading-6 text-slate-300 ${title === "Email Us" ? "break-all" : ""} ${title === "Call Us" ? "whitespace-nowrap" : ""}`}>{text}</p>
+                        <p className={`mt-1 text-sm leading-6 text-slate-300 ${title === "Email Us" ? "break-all" : ""} ${title === "Call Us" ? "whitespace-nowrap" : ""}`}>{text}</p>
                       </div>
                     </div>
                   </div>
@@ -506,10 +506,24 @@ export default function Home() {
             <Reveal delay={0.08} className="overflow-hidden rounded-2xl border border-white/10 bg-slate-900 shadow-premium">
               <iframe
                 title="Allivin Laboratories map"
-                className="h-[430px] w-full border-0 lg:h-[520px]"
+                className="h-[360px] w-full border-0 lg:h-[430px]"
                 loading="lazy"
                 src={`https://www.google.com/maps?q=${encodeURIComponent(contactInfo.address)}&output=embed`}
               />
+              <div className="grid gap-4 border-t border-white/10 bg-slate-950/70 p-5 text-sm text-slate-300 md:grid-cols-3">
+                <div className="flex gap-3">
+                  <MapPin className="mt-1 shrink-0 text-brand-teal" size={18} />
+                  <span className="leading-6">{contactInfo.address}</span>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="mt-1 shrink-0 text-brand-teal" size={18} />
+                  <span className="leading-6">{contactInfo.phone}</span>
+                </div>
+                <div className="flex gap-3">
+                  <Mail className="mt-1 shrink-0 text-brand-teal" size={18} />
+                  <span className="break-all leading-6">{contactInfo.email}</span>
+                </div>
+              </div>
             </Reveal>
           </div>
 
