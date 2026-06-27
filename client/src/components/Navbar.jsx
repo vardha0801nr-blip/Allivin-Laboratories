@@ -17,6 +17,9 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { dark, toggleTheme } = useTheme();
+  const headerClass = open
+    ? "site-sidebar fixed inset-0 z-[9999] overflow-y-auto border-0 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.28),_transparent_34%),linear-gradient(160deg,#020617_0%,#08213a_52%,#020617_100%)] text-white shadow-premium xl:fixed xl:inset-y-0 xl:left-0 xl:w-72 xl:border-r xl:border-white/10"
+    : "site-sidebar sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90 xl:fixed xl:inset-y-0 xl:left-0 xl:w-72 xl:border-b-0 xl:border-r xl:bg-brand-navy xl:text-white xl:shadow-none xl:backdrop-blur-none xl:dark:bg-slate-950";
 
   function openSection(hash) {
     setOpen(false);
@@ -32,14 +35,14 @@ export default function Navbar() {
   }
 
   return (
-    <header className="site-sidebar sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90 xl:fixed xl:inset-y-0 xl:left-0 xl:w-72 xl:border-b-0 xl:border-r xl:bg-brand-navy xl:text-white xl:shadow-none xl:backdrop-blur-none xl:dark:bg-slate-950">
+    <header className={headerClass}>
       <nav className="section-shell flex h-[76px] items-center justify-between gap-5 xl:h-full xl:flex-col xl:items-stretch xl:justify-start xl:px-5 xl:py-6">
         <Link to="/" className="group flex min-w-fit items-center gap-3">
           <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-blue to-brand-navy text-white shadow-lg shadow-blue-700/20 transition group-hover:-translate-y-0.5 xl:bg-gradient-to-br xl:from-white/20 xl:to-white/10">
             <ShieldPlus size={26} />
           </span>
           <span>
-            <span className="block text-2xl font-extrabold leading-6 tracking-tight text-brand-navy dark:text-white xl:text-white">Allivin</span>
+            <span className={`block text-2xl font-extrabold leading-6 tracking-tight xl:text-white ${open ? "text-white" : "text-brand-navy dark:text-white"}`}>Allivin</span>
             <span className="block text-xs font-extrabold uppercase tracking-[0.32em] text-brand-teal xl:text-cyan-200">Laboratories</span>
           </span>
         </Link>
@@ -61,40 +64,27 @@ export default function Navbar() {
           <button aria-label="Toggle theme" onClick={toggleTheme} className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 transition hover:border-brand-blue hover:text-brand-blue dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 xl:w-full xl:border-white/15 xl:bg-white/10 xl:text-white xl:hover:bg-white/15">
             {dark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          <button aria-label="Open menu" onClick={() => setOpen(true)} className="rounded-xl border border-slate-200 bg-white p-2.5 text-slate-700 xl:hidden dark:border-slate-700 dark:bg-slate-900 dark:text-white">
-            <Menu size={22} />
+          <button aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen((value) => !value)} className={`rounded-xl border p-2.5 transition xl:hidden ${open ? "border-white/15 bg-white/5 text-white hover:bg-white/10" : "border-slate-200 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-900 dark:text-white"}`}>
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </nav>
 
       {open && (
-        <div className="fixed inset-0 z-[100] bg-slate-950 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="relative h-full w-full overflow-y-auto bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.28),_transparent_34%),linear-gradient(160deg,#020617_0%,#08213a_52%,#020617_100%)] p-5 text-white shadow-premium" onClick={(event) => event.stopPropagation()}>
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-brand-blue/10 blur-3xl" />
-            <div className="relative mb-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-              <div className="flex items-center gap-3">
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-blue text-white shadow-lg shadow-blue-950/30">
-                  <ShieldPlus size={24} />
-                </span>
-                <div>
-                  <span className="block text-xl font-extrabold text-white">Allivin Labs</span>
-                  <span className="block text-xs font-extrabold uppercase tracking-[0.25em] text-brand-teal">Menu</span>
-                </div>
-              </div>
-              <button aria-label="Close menu" onClick={() => setOpen(false)} className="rounded-xl border border-white/15 bg-white/5 p-3 text-white transition hover:bg-white/10">
-                <X size={20} />
+        <div className="section-shell relative z-10 pb-8 lg:hidden">
+          <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+            <p className="text-xs font-extrabold uppercase tracking-[0.25em] text-brand-teal">Menu</p>
+            <p className="mt-1 text-sm font-semibold text-slate-300">Select any section to open it.</p>
+          </div>
+          <div className="grid gap-3">
+            {links.map(([label, href]) => (
+              <button key={label} type="button" onClick={() => openSection(href)} className="rounded-2xl border border-white/10 bg-white/[0.08] px-5 py-4 text-left text-base font-extrabold text-slate-50 shadow-lg shadow-slate-950/15 transition active:scale-[0.99] hover:border-brand-teal/50 hover:bg-brand-blue hover:text-white">
+                {label}
               </button>
-            </div>
-            <div className="relative grid gap-3">
-              {links.map(([label, href]) => (
-                <button key={label} type="button" onClick={() => openSection(href)} className="rounded-2xl border border-white/10 bg-white/[0.07] px-5 py-4 text-left text-base font-extrabold text-slate-50 shadow-lg shadow-slate-950/15 transition hover:border-brand-teal/50 hover:bg-brand-blue hover:text-white">
-                  {label}
-                </button>
-              ))}
-              <Link to="/admin-login" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-blue px-5 py-4 font-extrabold text-white shadow-lg shadow-blue-950/30 transition hover:bg-brand-navy">
-                <LogIn size={18} /> Admin Login
-              </Link>
-            </div>
+            ))}
+            <Link to="/admin-login" onClick={() => setOpen(false)} className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-brand-blue px-5 py-4 font-extrabold text-white shadow-lg shadow-blue-950/30 transition hover:bg-brand-navy">
+              <LogIn size={18} /> Admin Login
+            </Link>
           </div>
         </div>
       )}
