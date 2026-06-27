@@ -16,8 +16,15 @@ const blankProduct = {
 };
 const blankGallery = { title: "", category: "Laboratory", image: "" };
 const galleryCategories = ["Laboratory", "Manufacturing", "Quality Testing", "Products", "Packaging"];
+const defaultContact = {
+  address: "NO.7-55, ROAD.NO.13, SATYANARAYANAPURAM, PARVATHAPUR, MEDIPALLY, MEDCHAL DIST., Parvatapur(V), Medipally(M), MEDCHAL MALKAJGIRI(Dist), Telangana, India",
+  email: "info@allivinlabs.com",
+  phone: "+91 96663 43024",
+  hours: "Mon - Sat : 9:00 AM - 6:00 PM\nSunday : Closed"
+};
 const productStorageKey = "allivin_admin_products";
 const galleryStorageKey = "allivin_admin_gallery_v3";
+const contactStorageKey = "allivin_admin_contact";
 
 function getItemId(item) {
   return item._id || item.id;
@@ -52,6 +59,20 @@ function saveStoredItems(key, items) {
   localStorage.setItem(key, JSON.stringify(items));
 }
 
+function readStoredObject(key, fallbackItem) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(key) || "null");
+    if (stored && typeof stored === "object" && !Array.isArray(stored)) return { ...fallbackItem, ...stored };
+  } catch {
+    localStorage.removeItem(key);
+  }
+  return fallbackItem;
+}
+
+function saveStoredObject(key, item) {
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
 function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     if (!file) return resolve("");
@@ -82,6 +103,7 @@ export default function Dashboard() {
   const [galleryForm, setGalleryForm] = useState(blankGallery);
   const [editingGalleryId, setEditingGalleryId] = useState("");
   const [galleryImageFile, setGalleryImageFile] = useState(null);
+  const [contactForm, setContactForm] = useState(defaultContact);
   const [status, setStatus] = useState("");
 
   async function loadData() {
@@ -91,8 +113,10 @@ export default function Dashboard() {
     const shouldKeepLocalGallery = hasStoredItems(galleryStorageKey);
     setProducts(localProducts);
     setGallery(localGallery);
+    setContactForm(readStoredObject(contactStorageKey, defaultContact));
     saveStoredItems(productStorageKey, localProducts);
     saveStoredItems(galleryStorageKey, localGallery);
+    saveStoredObject(contactStorageKey, readStoredObject(contactStorageKey, defaultContact));
 
     try {
       const [productRes, galleryRes] = await Promise.all([
@@ -252,6 +276,19 @@ export default function Dashboard() {
     setStatus("Gallery image deleted.");
   }
 
+  function saveContact(event) {
+    event.preventDefault();
+    const cleanContact = {
+      address: contactForm.address.trim() || defaultContact.address,
+      email: contactForm.email.trim() || defaultContact.email,
+      phone: contactForm.phone.trim() || defaultContact.phone,
+      hours: contactForm.hours.trim() || defaultContact.hours
+    };
+    setContactForm(cleanContact);
+    saveStoredObject(contactStorageKey, cleanContact);
+    setStatus("Contact information updated.");
+  }
+
   return (
     <main className="min-h-screen bg-slate-100 dark:bg-slate-950">
       <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 lg:block">
@@ -262,7 +299,8 @@ export default function Dashboard() {
         <div className="mt-10 grid gap-2">
           {[
             ["products", "Product Management"],
-            ["gallery", "Gallery Management"]
+            ["gallery", "Gallery Management"],
+            ["contact", "Contact Management"]
           ].map(([id, label]) => (
             <button key={id} onClick={() => setTab(id)} className={`rounded-lg px-4 py-3 text-left text-sm font-bold transition ${tab === id ? "bg-brand-blue text-white" : "text-slate-700 hover:bg-blue-50 dark:text-slate-200 dark:hover:bg-slate-800"}`}>{label}</button>
           ))}
@@ -278,7 +316,7 @@ export default function Dashboard() {
               <h2 className="text-2xl font-extrabold text-brand-navy dark:text-white">Content Management</h2>
             </div>
             <div className="flex gap-2 lg:hidden">
-              {["products", "gallery"].map((id) => (
+              {["products", "gallery", "contact"].map((id) => (
                 <button key={id} onClick={() => setTab(id)} className={`rounded-lg px-3 py-2 text-sm font-bold ${tab === id ? "bg-brand-blue text-white" : "bg-slate-100 dark:bg-slate-800"}`}>{id}</button>
               ))}
             </div>
@@ -383,6 +421,37 @@ export default function Dashboard() {
             </div>
           )}
 
+          {tab === "contact" && (
+            <div className="grid gap-6 xl:grid-cols-[520px_1fr]">
+              <Panel title="Edit Contact Us">
+                <form onSubmit={saveContact} className="grid gap-4">
+                  <Field label="Our Location">
+                    <textarea className="input min-h-32" placeholder="Company address" value={contactForm.address} onChange={(event) => setContactForm({ ...contactForm, address: event.target.value })} required />
+                  </Field>
+                  <Field label="Email Us">
+                    <input className="input" type="email" placeholder="Email address" value={contactForm.email} onChange={(event) => setContactForm({ ...contactForm, email: event.target.value })} required />
+                  </Field>
+                  <Field label="Call Us">
+                    <input className="input" placeholder="Phone number" value={contactForm.phone} onChange={(event) => setContactForm({ ...contactForm, phone: event.target.value })} required />
+                  </Field>
+                  <Field label="Working Hours">
+                    <textarea className="input min-h-24" placeholder="Working hours" value={contactForm.hours} onChange={(event) => setContactForm({ ...contactForm, hours: event.target.value })} required />
+                  </Field>
+                  <button className="btn-primary"><Save size={18} /> Save Contact Details</button>
+                </form>
+              </Panel>
+
+              <Panel title="Current Contact Preview">
+                <div className="grid gap-4">
+                  <PreviewRow label="Our Location" value={contactForm.address} />
+                  <PreviewRow label="Email Us" value={contactForm.email} />
+                  <PreviewRow label="Call Us" value={contactForm.phone} />
+                  <PreviewRow label="Working Hours" value={contactForm.hours} />
+                </div>
+              </Panel>
+            </div>
+          )}
+
         </div>
       </section>
     </main>
@@ -395,6 +464,15 @@ function Panel({ title, children }) {
       <h3 className="mb-5 text-lg font-extrabold text-brand-navy dark:text-white">{title}</h3>
       {children}
     </section>
+  );
+}
+
+function PreviewRow({ label, value }) {
+  return (
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
+      <p className="text-xs font-bold uppercase tracking-widest text-brand-teal">{label}</p>
+      <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700 dark:text-slate-200">{value}</p>
+    </div>
   );
 }
 

@@ -88,25 +88,25 @@ export const productDetailDefaults = {
     uses: "Used for accurate oral dosing, patient-friendly administration, and stable solid dosage delivery.",
     applications: "Commonly applied in general medicine, nutraceuticals, antacid products, vitamins, analgesics, and prescription formulations.",
     quality: "Manufactured with checks for weight variation, hardness, friability, disintegration, dissolution, and coating uniformity.",
-    contactPhone: "+91 98765 43210"
+    contactPhone: "+91 96663 43024"
   },
   Capsules: {
     uses: "Used for encapsulating powders, granules, oils, probiotics, herbal blends, vitamins, and sensitive ingredients.",
     applications: "Suitable for antibiotics, multivitamins, probiotics, herbal products, delayed-release products, and specialty formulations.",
     quality: "Manufactured with fill-weight control, shell integrity checks, moisture protection, visual inspection, and packaging review.",
-    contactPhone: "+91 98765 43210"
+    contactPhone: "+91 96663 43024"
   },
   Syrups: {
     uses: "Used for liquid oral dosing where palatability, easy swallowing, and flexible administration are important.",
     applications: "Commonly used in pediatric products, cough preparations, antacid liquids, vitamin tonics, herbal syrups, and antihistamines.",
     quality: "Manufactured with blending uniformity, pH checks, viscosity review, microbial controls, filtration, and fill-volume accuracy.",
-    contactPhone: "+91 98765 43210"
+    contactPhone: "+91 96663 43024"
   },
   Injections: {
     uses: "Used for sterile injectable delivery where rapid action, controlled dosage, and clinical reliability are required.",
     applications: "Suitable for antibiotics, vitamins, analgesics, anti-inflammatory products, electrolyte solutions, and critical care injectables.",
     quality: "Manufactured with sterility focus, particulate inspection, batch documentation, controlled filling, and strict quality release.",
-    contactPhone: "+91 98765 43210"
+    contactPhone: "+91 96663 43024"
   }
 };
 

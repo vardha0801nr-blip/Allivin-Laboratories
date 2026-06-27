@@ -55,17 +55,17 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="fixed inset-0 z-50 bg-slate-950/50 lg:hidden" onClick={() => setOpen(false)}>
-          <div className="ml-auto h-full w-full max-w-sm bg-white p-6 shadow-premium dark:bg-slate-950" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-[100] bg-slate-950 lg:hidden" onClick={() => setOpen(false)}>
+          <div className="h-full w-full overflow-y-auto bg-slate-950 p-6 text-white shadow-premium" onClick={(event) => event.stopPropagation()}>
             <div className="mb-8 flex items-center justify-between">
-              <span className="text-lg font-extrabold text-brand-navy dark:text-white">Allivin Labs</span>
-              <button aria-label="Close menu" onClick={() => setOpen(false)} className="rounded-lg border border-slate-200 p-2 dark:border-slate-700">
+              <span className="text-lg font-extrabold text-white">Allivin Labs</span>
+              <button aria-label="Close menu" onClick={() => setOpen(false)} className="rounded-lg border border-white/15 bg-white/5 p-2 text-white">
                 <X size={20} />
               </button>
             </div>
             <div className="grid gap-2">
               {links.map(([label, href]) => (
-                <a key={label} href={`/${href}`} onClick={() => setOpen(false)} className="rounded-lg px-4 py-3 font-semibold text-slate-700 transition hover:bg-blue-50 hover:text-brand-blue dark:text-slate-200 dark:hover:bg-slate-800">
+                <a key={label} href={`/${href}`} onClick={() => setOpen(false)} className="rounded-xl bg-white/[0.06] px-4 py-3 font-semibold text-slate-100 transition hover:bg-brand-blue hover:text-white">
                   {label}
                 </a>
               ))}

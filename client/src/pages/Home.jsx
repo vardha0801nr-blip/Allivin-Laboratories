@@ -8,6 +8,14 @@ import { certifications, facilities, gallery as defaultGallery, imageBank, produ
 
 const productStorageKey = "allivin_admin_products";
 const galleryStorageKey = "allivin_admin_gallery_v3";
+const contactStorageKey = "allivin_admin_contact";
+
+const defaultContact = {
+  address: "NO.7-55, ROAD.NO.13, SATYANARAYANAPURAM, PARVATHAPUR, MEDIPALLY, MEDCHAL DIST., Parvatapur(V), Medipally(M), MEDCHAL MALKAJGIRI(Dist), Telangana, India",
+  email: "info@allivinlabs.com",
+  phone: "+91 96663 43024",
+  hours: "Mon - Sat : 9:00 AM - 6:00 PM\nSunday : Closed"
+};
 
 function getItemId(item) {
   return item._id || item.id || item.title || item.name;
@@ -23,6 +31,20 @@ function readStoredItems(key, fallbackItems) {
   return fallbackItems;
 }
 
+function readStoredObject(key, fallbackItem) {
+  try {
+    const stored = JSON.parse(localStorage.getItem(key) || "null");
+    if (stored && typeof stored === "object" && !Array.isArray(stored)) return { ...fallbackItem, ...stored };
+  } catch {
+    localStorage.removeItem(key);
+  }
+  return fallbackItem;
+}
+
+function phoneHref(phone) {
+  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+}
+
 export default function Home() {
   const sectionIds = ["home", "about", "products", "facilities", "quality", "certifications", "gallery", "contact"];
   const getHashSection = () => {
@@ -32,13 +54,14 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState(getHashSection);
   const [publicProducts, setPublicProducts] = useState(() => readStoredItems(productStorageKey, defaultProducts));
   const [publicGallery, setPublicGallery] = useState(() => readStoredItems(galleryStorageKey, defaultGallery));
+  const [contactInfo, setContactInfo] = useState(() => readStoredObject(contactStorageKey, defaultContact));
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [galleryFilter, setGalleryFilter] = useState("All");
   const [lightbox, setLightbox] = useState(null);
 
   const categories = ["All", ...new Set(publicProducts.map((product) => product.category))];
-  const galleryCategories = ["All", "Laboratory", "Manufacturing", "Quality Testing", "Products"];
+  const galleryCategories = ["All", "Laboratory", "Manufacturing", "Quality Testing", "Products", "Packaging"];
   const homeStats = [
     { icon: Award, number: "5+", label: "Years of Experience" },
     { icon: Box, number: "120+", label: "Products Manufactured" },
@@ -112,6 +135,7 @@ export default function Home() {
     const syncAdminChanges = (event) => {
       if (!event || event.key === productStorageKey) setPublicProducts(readStoredItems(productStorageKey, defaultProducts));
       if (!event || event.key === galleryStorageKey) setPublicGallery(readStoredItems(galleryStorageKey, defaultGallery));
+      if (!event || event.key === contactStorageKey) setContactInfo(readStoredObject(contactStorageKey, defaultContact));
     };
     syncAdminChanges();
     window.addEventListener("storage", syncAdminChanges);
@@ -446,22 +470,22 @@ export default function Home() {
                   {
                     icon: MapPin,
                     title: "Our Location",
-                    text: "Industrial Pharma Park, Hyderabad, Telangana, India - 500 075"
+                    text: contactInfo.address
                   },
                   {
                     icon: Mail,
                     title: "Email Us",
-                    text: "info@allivinlabs.com"
+                    text: contactInfo.email
                   },
                   {
                     icon: Phone,
                     title: "Call Us",
-                    text: "+91 98765 43210"
+                    text: contactInfo.phone
                   },
                   {
                     icon: Clock,
                     title: "Working Hours",
-                    text: "Mon - Sat : 9:00 AM - 6:00 PM\nSunday : Closed"
+                    text: contactInfo.hours
                   }
                 ].map(({ icon: Icon, title, text }) => (
                   <div key={title} className="min-h-36 rounded-xl border border-white/10 bg-white/[0.04] p-4 shadow-lg shadow-slate-950/20 transition hover:-translate-y-1 hover:border-brand-teal/50 hover:bg-white/[0.07] sm:p-5">
@@ -484,7 +508,7 @@ export default function Home() {
                 title="Allivin Laboratories map"
                 className="h-[430px] w-full border-0 lg:h-[520px]"
                 loading="lazy"
-                src="https://www.google.com/maps?q=Allivin%20Laboratories%20Hyderabad&output=embed"
+                src={`https://www.google.com/maps?q=${encodeURIComponent(contactInfo.address)}&output=embed`}
               />
             </Reveal>
           </div>
@@ -501,8 +525,8 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
-                <a href="tel:+919876543210" className="btn-primary min-w-44"><Phone size={18} /> Call Now</a>
-                <a href="mailto:info@allivinlabs.com" className="inline-flex min-w-44 items-center justify-center gap-2 rounded-lg border border-brand-teal/70 px-5 py-3 text-sm font-bold text-cyan-100 transition hover:-translate-y-0.5 hover:bg-brand-teal/15"><Mail size={18} /> Email Us</a>
+                <a href={phoneHref(contactInfo.phone)} className="btn-primary min-w-44"><Phone size={18} /> Call Now</a>
+                <a href={`mailto:${contactInfo.email}`} className="inline-flex min-w-44 items-center justify-center gap-2 rounded-lg border border-brand-teal/70 px-5 py-3 text-sm font-bold text-cyan-100 transition hover:-translate-y-0.5 hover:bg-brand-teal/15"><Mail size={18} /> Email Us</a>
               </div>
             </div>
           </Reveal>
@@ -548,9 +572,9 @@ export default function Home() {
             <div>
               <h3 className="font-extrabold">Contact Info</h3>
               <div className="mt-4 grid gap-3 text-sm text-slate-300">
-                <span className="flex gap-3"><Phone className="shrink-0 text-brand-teal" size={18} /> +91 98765 43210</span>
-                <span className="flex gap-3"><Mail className="shrink-0 text-brand-teal" size={18} /> info@allivinlabs.com</span>
-                <span className="flex gap-3"><MapPin className="shrink-0 text-brand-teal" size={18} /> Industrial Pharma Park, Hyderabad, Telangana, India - 500 075</span>
+                <span className="flex gap-3"><Phone className="shrink-0 text-brand-teal" size={18} /> {contactInfo.phone}</span>
+                <span className="flex gap-3"><Mail className="shrink-0 text-brand-teal" size={18} /> {contactInfo.email}</span>
+                <span className="flex gap-3"><MapPin className="shrink-0 text-brand-teal" size={18} /> {contactInfo.address}</span>
               </div>
             </div>
 
